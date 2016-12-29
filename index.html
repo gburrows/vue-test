@@ -2,15 +2,59 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<script src="https://unpkg.com/vue@2.1.7/dist/vue.min.js"></script>
+	<script src="/index.js"></script>
+	<link rel="stylesheet" href="/style.css">
 	<title>My App</title>
 </head>
 <body>
-	May node and express be with you!
+	<div id="app">
+	    <div v-for="todo in todos">
+	      {{ todo.text }}
+	    </div>
+	</div>
+	<script>
+		var app = new Vue({
+		  el: '#app',
+		  data: {
+		    todos: [
+		      { text: 'Paste here' }
+		    ]
+		  },
+		  methods: {
 
-	<form action="/quotes" method="POST">
-		<input type="text" placeholder="name" name="name">
-		<input type="text" placeholder="quote" name="quote">
-		<button type="submit">Submit</button>
-	</form>
+		  }
+		})
+		
+		// colour(hex), url(link), url(image), text #000
+		const hexRegex = /^#(?:[0-9a-fA-F]{3}){1,2}$/
+
+		const addItem = (text) => {
+			const item = {text};
+			if (text.match(hexRegex) ) { // colour
+				item.type = "colour"; 
+			}
+			console.log(item)
+			if (item.type) {
+				app.todos.push(item);
+			}
+		};
+
+		var myElement = document.getElementById('app');
+		myElement.onpaste = function(e) {
+		  var pastedText = undefined;
+		  if (window.clipboardData && window.clipboardData.getData) { // IE
+		    pastedText = window.clipboardData.getData('Text');
+		  } else if (e.clipboardData && e.clipboardData.getData) {
+		    pastedText = e.clipboardData.getData('text/plain');
+		  }
+		  console.log(pastedText);
+		  addItem(pastedText); // Process and handle text...
+		  return false; // Prevent the default handler from running.
+		};
+
+
+
+	</script>
 </body>
 </html>
